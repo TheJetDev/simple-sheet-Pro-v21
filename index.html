@@ -9,39 +9,21 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SimpleCalc">
     
-    <link rel="manifest" 
-href="data:application/json;base64,ewogICJuYW1lIjogIlNpbXBsZSBTaGVldCBQUk8iLAogICJzaG9ydF9uYW1lIjogIlNpbXBsZVNoZWV0IiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmMGYyZjUiLAogICJ0aGVtZV9jb2xvciI6ICIjMDA3YmZmIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9jZG4taWNvbnMtcG5nLmZsYXRpY29uLmNvbS81MTIvMjkwNy8yOTA3OTE0LnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIgogICAgfQogIF0KfQ==">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
     <style>
         body { font-family: sans-serif; padding: 8px; background-color: #f0f2f5; margin: 0; box-sizing: border-box; font-size: 16px; -webkit-text-size-adjust: 100%; }
         * { box-sizing: border-box; }
         .app-grid { display: flex; gap: 12px; max-width: 1400px; margin: 0 auto; }
         .calculator-container { flex: 3; min-width: 0; background-color: #fff; padding: 12px; border-radius: 10px; box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1); width: 100%; }
-        
-        /* トップのコントロール */
         .top-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
         .master-name-group { flex: 1; display: flex; align-items: center; border: 2px solid #007bff; border-radius: 6px; padding: 4px 10px; background-color: #fff; min-width: 150px; }
         .master-name-input { flex-grow: 1; border: none; font-size: 1em; outline: none; font-weight: bold; width: 100%; }
-        
-        /* 言語切り替え：ボタンが多くても折り返すように設定 */
         .lang-switch { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; flex: 1; }
-
-        /* 元の数字（赤枠）：強制横並び */
-        .master-row { 
-            padding: 12px; 
-            margin-bottom: 12px; 
-            border: 3px solid #dc3545; 
-            border-radius: 10px; 
-            background-color: #fff; 
-            display: flex; 
-            flex-direction: row; 
-            align-items: center; 
-            justify-content: space-between; 
-            gap: 10px; 
-        }
+        .master-row { padding: 12px; margin-bottom: 12px; border: 3px solid #dc3545; border-radius: 10px; background-color: #fff; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 10px; }
         .master-label-start { font-weight: bold; color: #dc3545; font-size: 1.1em; flex: 1; white-space: nowrap; }
         .master-input { width: 45%; max-width: 180px; padding: 8px; border: 2px solid #dc3545; border-radius: 6px; font-size: 1.5em; text-align: right; font-weight: bold; }
-
-        /* 計算行 */
         .row { display: flex; align-items: center; margin-bottom: 8px; padding: 10px; border: 1px solid #ccc; border-radius: 10px; background-color: #fff; gap: 6px; flex-wrap: nowrap; }
         .text-label-input { flex: 1; min-width: 0; padding: 8px; border: 1px solid #bbb; border-radius: 6px; font-size: 1em; font-weight: bold; }
         .operator-group { display: flex; flex-direction: column; align-items: center; width: 22px; flex-shrink: 0; }
@@ -61,8 +43,6 @@ href="data:application/json;base64,ewogICJuYW1lIjogIlNpbXBsZSBTaGVldCBQUk8iLAogI
             .multiplier-input { order: 2; flex: 1; width: auto; } 
             .percent-toggle, .base-toggle { order: 3; }
             .result-group { order: 4; flex: 1 1 100%; margin-top: 6px; justify-content: space-between; padding: 8px 12px; }
-            .master-row { flex-direction: row !important; }
-            .master-input { width: 50%; }
         }
 
         .side-calc { flex: 1; min-width: 280px; background: #333; padding: 12px; border-radius: 10px; color: white; height: fit-content; position: sticky; top: 8px; }
@@ -72,6 +52,7 @@ href="data:application/json;base64,ewogICJuYW1lIjogIlNpbXBsZSBTaGVldCBQUk8iLAogI
         .calc-btn.op { background: #f39c12; }
         .calc-btn.equal { background: #27ae60; grid-column: span 2; }
         .calc-btn.clear { background: #c0392b; }
+
         @media screen and (max-width: 900px) {
             .side-calc { display: none; position: fixed; bottom: 80px; right: 15px; z-index: 1000; width: 280px; }
             .side-calc.active { display: block; }
@@ -186,9 +167,9 @@ href="data:application/json;base64,ewogICJuYW1lIjogIlNpbXBsZSBTaGVldCBQUk8iLAogI
     </div>
 
     <script>
-        // PWA 対応
+        // サービスワーカーの登録
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIGZ1bmN0aW9uKGV2ZW50KSB7IH0pOw==');
+            navigator.serviceWorker.register('sw.js');
         }
 
         let currentCalc = "0";
