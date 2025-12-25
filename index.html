@@ -21,31 +21,17 @@
         .master-row { padding: 12px; margin-bottom: 12px; border: 3px solid #dc3545; border-radius: 10px; background-color: #fff; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
         .master-label-start { font-weight: bold; color: #dc3545; font-size: 1.1em; flex: 1; white-space: nowrap; }
         .master-input { width: 45%; max-width: 180px; padding: 8px; border: 2px solid #dc3545; border-radius: 6px; font-size: 1.5em; text-align: right; font-weight: bold; }
-        
-        /* 計算行のスタイル */
-        .row { display: flex; align-items: center; margin-bottom: 8px; padding: 10px; border: 1px solid #ccc; border-radius: 10px; background-color: #fff; gap: 6px; flex-wrap: wrap; }
-        .text-label-input { flex: 1.5; min-width: 0; padding: 8px; border: 1px solid #bbb; border-radius: 6px; font-size: 1em; font-weight: bold; }
-        .row-controls { display: flex; align-items: center; gap: 6px; flex: 2; justify-content: flex-end; }
-        
+        .row { display: flex; align-items: center; margin-bottom: 8px; padding: 10px; border: 1px solid #ccc; border-radius: 10px; background-color: #fff; gap: 6px; }
+        .text-label-input { flex: 1; min-width: 0; padding: 8px; border: 1px solid #bbb; border-radius: 6px; font-size: 1em; font-weight: bold; }
         .operator-group { display: flex; flex-direction: column; align-items: center; width: 22px; flex-shrink: 0; }
         .operator-control { font-size: 0.5em; background: #333; color: #fff; width: 100%; height: 16px; display: flex; justify-content: center; align-items: center; border-radius: 3px; cursor: pointer; }
         .operator-display { font-size: 1.4em; font-weight: bold; text-align: center; color: #000; width: 100%; height: 28px; line-height: 28px; }
-        .multiplier-input { width: 90px; padding: 10px 4px; border: 3px solid #007bff; border-radius: 6px; text-align: right; font-weight: bold; font-size: 1.3em; flex-shrink: 0; }
+        .multiplier-input { width: 30%; min-width: 90px; padding: 10px 4px; border: 3px solid #007bff; border-radius: 6px; text-align: right; font-weight: bold; font-size: 1.3em; flex-shrink: 0; }
         .percent-toggle, .base-toggle { border: 2px solid #ccc; border-radius: 6px; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: bold; background: #fff; flex-shrink: 0; font-size: 1.1em; }
         .percent-toggle.active { background: #dc3545; color: #fff; border-color: #dc3545; }
-        .result-group { display: flex; align-items: center; justify-content: flex-end; gap: 4px; min-width: 130px; background: #f8f9fa; padding: 4px 8px; border-radius: 6px; border: 1px inset #eee; }
+        .result-group { flex: 1.2; display: flex; align-items: center; justify-content: flex-end; gap: 4px; min-width: 120px; background: #f8f9fa; padding: 4px 8px; border-radius: 6px; border: 1px inset #eee; }
         .result-text { font-size: 1.5em; font-weight: bold; color: #007bff; white-space: nowrap; }
         .action-btn { border: none; background: none; cursor: pointer; font-size: 1.4em; padding: 0 2px; opacity: 0.7; }
-        
-        /* スマホ向けレスポンシブ調整 */
-        @media screen and (max-width: 600px) {
-            .row { flex-direction: column; align-items: stretch; }
-            .text-label-input { width: 100%; margin-bottom: 4px; font-size: 1.1em; }
-            .row-controls { width: 100%; justify-content: space-between; }
-            .multiplier-input { flex-grow: 1; width: auto; }
-            .result-group { flex-grow: 1.2; }
-        }
-
         .final-total-area { margin-top: 15px; padding: 20px; border: 3px solid #28a745; border-radius: 12px; background:#e6ffed; text-align: center; cursor: pointer; }
         .side-calc { flex: 1; min-width: 280px; background: #333; padding: 12px; border-radius: 10px; color: white; height: fit-content; position: sticky; top: 8px; }
         .calc-display { width: 100%; height: 52px; background: #222; border: none; color: #fff; text-align: right; font-size: 1.8em; padding: 8px; border-radius: 6px; margin-bottom: 8px; }
@@ -54,13 +40,11 @@
         .calc-btn.op { background: #f39c12; }
         .calc-btn.equal { background: #27ae60; grid-column: span 2; }
         .calc-btn.clear { background: #c0392b; }
-
         @media screen and (max-width: 900px) {
             .side-calc { display: none; position: fixed; bottom: 80px; right: 15px; z-index: 1000; width: 280px; }
             .side-calc.active { display: block; }
             .calc-toggle-btn { display: block !important; position: fixed; bottom: 15px; right: 15px; width: 60px; height: 60px; border-radius: 50%; background: #333; color: white; border: none; font-size: 28px; z-index: 1001; }
         }
-
         .lang-button { background: #e9ecef; border: 1px solid #ccc; padding: 5px 6px; cursor: pointer; border-radius: 5px; font-size: 0.75em; min-width: 40px; font-weight: bold; }
         .lang-button.active { background-color: #007bff; color: white; }
         .util-btn { border: none; background: #6c757d; color: white; padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: bold; }
@@ -242,12 +226,10 @@
             const id = s ? s.id : Math.random().toString(36).substr(2, 5);
             const div = document.createElement('div'); div.className='row'; div.dataset.id=id;
             div.innerHTML = `<input type="text" class="text-label-input" value="${s?s.label:''}" oninput="saveSettings()">
-                <div class="row-controls">
-                    <div class="operator-group"><div class="operator-control" onclick="changeOp('${id}','smart',1)">▲</div><div class="operator-display" id="smart-op-${id}">${s?s.operator:'+'}</div><div class="operator-control" onclick="changeOp('${id}','smart',-1)">▼</div></div>
-                    <input type="number" class="multiplier-input" value="${s?s.multiplier:'0'}" oninput="updateDisplay()">
-                    <div class="percent-toggle ${s&&s.isPercentActive?'active':''}" onclick="this.classList.toggle('active');updateDisplay()">%</div>
-                    <div class="result-group"><div class="result-text">0</div><div><button class="action-btn" onclick="copyRowVal(this)">📋</button><button class="action-btn" onclick="this.closest('.row').remove();updateDisplay()">🗑️</button></div></div>
-                </div>`;
+                <div class="operator-group"><div class="operator-control" onclick="changeOp('${id}','smart',1)">▲</div><div class="operator-display" id="smart-op-${id}">${s?s.operator:'+'}</div><div class="operator-control" onclick="changeOp('${id}','smart',-1)">▼</div></div>
+                <input type="number" class="multiplier-input" value="${s?s.multiplier:'0'}" oninput="updateDisplay()">
+                <div class="percent-toggle ${s&&s.isPercentActive?'active':''}" onclick="this.classList.toggle('active');updateDisplay()">%</div>
+                <div class="result-group"><div class="result-text">0</div><div><button class="action-btn" onclick="copyRowVal(this)">📋</button><button class="action-btn" onclick="this.closest('.row').remove();updateDisplay()">🗑️</button></div></div>`;
             document.getElementById('rows-container-smart').appendChild(div); updateDisplay();
         }
 
@@ -256,13 +238,11 @@
             const div = document.createElement('div'); div.className='row'; div.dataset.id=id;
             const isChain = s ? s.baseMode==='chain' : true;
             div.innerHTML = `<input type="text" class="text-label-input" value="${s?s.label:''}" oninput="saveSettings()">
-                <div class="row-controls">
-                    <div id="simple-base-${id}" class="base-toggle ${isChain?'chain':''}" onclick="this.classList.toggle('chain');this.textContent=this.classList.contains('chain')?'🔗':'🏠';updateDisplay()">${isChain?'🔗':'🏠'}</div>
-                    <div class="operator-group"><div class="operator-control" onclick="changeOp('${id}','simple',1)">▲</div><div class="operator-display" id="simple-op-${id}">${s?s.operator:'+'}</div><div class="operator-control" onclick="changeOp('${id}','simple',-1)">▼</div></div>
-                    <input type="number" class="multiplier-input" value="${s?s.multiplier:'0'}" oninput="updateDisplay()">
-                    <div class="percent-toggle ${s&&s.isPercentActive?'active':''}" onclick="this.classList.toggle('active');updateDisplay()">%</div>
-                    <div class="result-group"><div class="result-text">0</div><div><button class="action-btn" onclick="copyRowVal(this)">📋</button><button class="action-btn" onclick="this.closest('.row').remove();updateDisplay()">🗑️</button></div></div>
-                </div>`;
+                <div id="simple-base-${id}" class="base-toggle ${isChain?'chain':''}" onclick="this.classList.toggle('chain');this.textContent=this.classList.contains('chain')?'🔗':'🏠';updateDisplay()">${isChain?'🔗':'🏠'}</div>
+                <div class="operator-group"><div class="operator-control" onclick="changeOp('${id}','simple',1)">▲</div><div class="operator-display" id="simple-op-${id}">${s?s.operator:'+'}</div><div class="operator-control" onclick="changeOp('${id}','simple',-1)">▼</div></div>
+                <input type="number" class="multiplier-input" value="${s?s.multiplier:'0'}" oninput="updateDisplay()">
+                <div class="percent-toggle ${s&&s.isPercentActive?'active':''}" onclick="this.classList.toggle('active');updateDisplay()">%</div>
+                <div class="result-group"><div class="result-text">0</div><div><button class="action-btn" onclick="copyRowVal(this)">📋</button><button class="action-btn" onclick="this.closest('.row').remove();updateDisplay()">🗑️</button></div></div>`;
             document.getElementById('rows-container-simple').appendChild(div); updateDisplay();
         }
 
